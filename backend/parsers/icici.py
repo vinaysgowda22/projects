@@ -9,38 +9,49 @@ from backend.parsers.base import BaseParser, TransactionDraft
 
 class ICICIParser(BaseParser):
     """Parser for ICICI Bank transaction emails."""
-    
+
     def can_parse(self, email: dict) -> bool:
         """Check if email is from ICICI Bank."""
         sender = email.get("sender", "").lower()
-        
+
         icici_senders = ["alerts@icicibank.com", "noreply@icicibank.com"]
-        
+
         return any(pattern in sender for pattern in icici_senders)
-    
+
     def get_sender_patterns(self) -> list[str]:
         return ["alerts@icicibank.com", "noreply@icicibank.com"]
-    
+
     def get_subject_patterns(self) -> list[str]:
         return ["Transaction Alert", "Debit Card", "Credit Card"]
-    
+
     def parse(self, email: dict) -> TransactionDraft:
         """Parse ICICI transaction email."""
         body = email.get("body", "")
         subject = email.get("subject", "")
-        
+
         draft = TransactionDraft()
         draft.gmail_id = email.get("gmail_id")
         draft.raw_email_subject = subject
-        
+
         # Extract amount
-        amount_match = re.search(r"(?:Rs\.?\s*|INR\s*)[\d,]+\.?\d*", body, re.IGNORECASE)
+        amount_match = re.search(
+            r"(?:Rs\.?\s*|INR\s*)[\d,]+\.?\d*", body, re.IGNORECASE
+        )
         if amount_match:
-            amount_str = amount_match.group().replace("Rs.", "").replace("Rs", "").replace("INR", "").replace(",", "").strip()
+            amount_str = (
+                amount_match.group()
+                .replace("Rs.", "")
+                .replace("Rs", "")
+                .replace("INR", "")
+                .replace(",", "")
+                .strip()
+            )
             draft.amount = Decimal(amount_str)
-        
+
         # Extract date
-        date_match = re.search(r"\d{2}[-/][A-Za-z]{3}[-/]\d{4}|\d{2}[-/]\d{2}[-/]\d{4}", body)
+        date_match = re.search(
+            r"\d{2}[-/][A-Za-z]{3}[-/]\d{4}|\d{2}[-/]\d{2}[-/]\d{4}", body
+        )
         if date_match:
             date_str = date_match.group()
             try:
@@ -52,28 +63,36 @@ class ICICIParser(BaseParser):
                         continue
             except Exception:
                 pass
-        
+
         # Extract merchant (after "At:" or "Merchant:" or "To:")
-        merchant_match = re.search(r"(?:At:|Merchant:|To:)\s*([^\n]+)", body, re.IGNORECASE)
+        merchant_match = re.search(
+            r"(?:At:|Merchant:|To:)\s*([^\n]+)", body, re.IGNORECASE
+        )
         if merchant_match:
             draft.merchant = merchant_match.group(1).strip()
-        
+
         # Extract reference number
-        ref_match = re.search(r"Ref\.?\s*(?:No\.?\s*)?:?\s*([A-Z0-9]+)", body, re.IGNORECASE)
+        ref_match = re.search(
+            r"Ref\.?\s*(?:No\.?\s*)?:?\s*([A-Z0-9]+)", body, re.IGNORECASE
+        )
         if ref_match:
             draft.reference_number = ref_match.group(1)
-        
+
         # Extract card identifier
-        card_match = re.search(r"(?:card|account)\s*(?:no\.?|ending)\s*:?\s*\*{0,4}(\d{4})", body, re.IGNORECASE)
+        card_match = re.search(
+            r"(?:card|account)\s*(?:no\.?|ending)\s*:?\s*\*{0,4}(\d{4})",
+            body,
+            re.IGNORECASE,
+        )
         if card_match:
             draft.account_identifier = card_match.group(1)
-        
+
         # Determine transaction type
         if "debit" in subject.lower() or "spent" in body.lower():
             draft.transaction_type = "debit"
         elif "credit" in subject.lower() or "received" in body.lower():
             draft.transaction_type = "credit"
-        
+
         draft.status = "posted"
-        
+
         return draft

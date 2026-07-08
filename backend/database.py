@@ -15,18 +15,20 @@ from backend.models.base import Base
 def get_engine():
     """Create and configure the database engine with WAL mode enabled."""
     config = get_config()
-    
+
     # Ensure database directory exists
     db_path = Path(config.database.path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     # Create engine with SQLite
     engine = create_engine(
         f"sqlite:///{config.database.path}",
-        connect_args={"check_same_thread": False},  # Needed for FastAPI/Streamlit sharing
+        connect_args={
+            "check_same_thread": False
+        },  # Needed for FastAPI/Streamlit sharing
         echo=False,  # Set to True for SQL query logging in development
     )
-    
+
     # Enable WAL mode for better concurrency
     @event.listens_for(engine, "connect")
     def set_sqlite_pragma(dbapi_conn, connection_record):
@@ -34,7 +36,7 @@ def get_engine():
         cursor.execute("PRAGMA journal_mode=WAL")
         cursor.execute("PRAGMA synchronous=NORMAL")
         cursor.close()
-    
+
     logger.info(f"Database engine created with WAL mode: {config.database.path}")
     return engine
 
@@ -56,7 +58,9 @@ def get_session_factory():
     """Get the singleton session factory."""
     global _session_factory
     if _session_factory is None:
-        _session_factory = sessionmaker(bind=get_engine_singleton(), autoflush=False, autocommit=False)
+        _session_factory = sessionmaker(
+            bind=get_engine_singleton(), autoflush=False, autocommit=False
+        )
     return _session_factory
 
 
@@ -87,18 +91,18 @@ def reset_db():
     engine = get_engine_singleton()
     # Disconnect all connections
     engine.dispose()
-    
+
     # Delete the database file and WAL files
     config = get_config()
     db_path = Path(config.database.path)
     db_dir = db_path.parent
-    
+
     # Delete all SQLite-related files in the database directory
     for db_file in db_dir.glob("*.db*"):
         if db_file.exists():
             db_file.unlink()
             logger.warning(f"Deleted database file: {db_file}")
-    
+
     # Recreate the database
     Base.metadata.create_all(bind=engine)
     logger.warning("Database schema reset (database file deleted and recreated)")
