@@ -10,7 +10,7 @@ from loguru import logger
 from openai import OpenAI
 
 from backend.config import get_config
-from backend.parsers.base_parser import BaseParser, TransactionDraft
+from backend.parsers.base import BaseParser, TransactionDraft
 
 
 class AIParser(BaseParser):
@@ -20,8 +20,8 @@ class AIParser(BaseParser):
         """Initialize the AI parser."""
         super().__init__()
         config = get_config()
-        self.client = OpenAI(api_key=config.openai.api_key)
-        self.model = config.openai.model
+        self.client = OpenAI(api_key=config.ai.api_key)
+        self.model = config.ai.model
     
     def parse(self, email: dict) -> Optional[TransactionDraft]:
         """Parse email using AI to extract transaction data.

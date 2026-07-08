@@ -8,7 +8,7 @@ from loguru import logger
 
 from backend.categorization import get_category_classifier
 from backend.duplicate_detection import get_duplicate_detector
-from backend.parsers.registry import ParserRegistry
+from backend.parsers.registry import ParserRegistry, get_parser_registry
 from backend.repositories.account_repository import AccountRepository
 from backend.repositories.failed_email_repository import FailedEmailRepository
 from backend.repositories.transaction_repository import TransactionRepository
@@ -31,7 +31,7 @@ class TransactionPipeline:
             duplicate_detector: DuplicateDetector instance. If None, uses global instance.
             category_classifier: CategoryClassifier instance. If None, uses global instance.
         """
-        self.parser_registry = parser_registry or ParserRegistry()
+        self.parser_registry = parser_registry or get_parser_registry()
         self.duplicate_detector = duplicate_detector or get_duplicate_detector()
         self.category_classifier = category_classifier or get_category_classifier()
     

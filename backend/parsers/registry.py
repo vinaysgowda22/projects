@@ -66,6 +66,43 @@ class ParserRegistry:
         return [parser.__class__.__name__ for parser in self._parsers]
 
 
+def create_default_registry() -> ParserRegistry:
+    """Create a registry pre-populated with all available bank parsers.
+
+    Regex-based bank parsers are always registered. The AI fallback parser is
+    only registered when AI features are enabled in the configuration.
+
+    Returns:
+        A ParserRegistry with the default set of parsers registered.
+    """
+    # Imported here to avoid circular imports at module load time.
+    from backend.config import get_config
+    from backend.parsers.amex import AmexParser
+    from backend.parsers.axis import AxisParser
+    from backend.parsers.hdfc import HDFCParser
+    from backend.parsers.icici import ICICIParser
+    from backend.parsers.kotak import KotakParser
+    from backend.parsers.sbi import SBIParser
+
+    registry = ParserRegistry()
+    for parser_cls in (
+        HDFCParser,
+        ICICIParser,
+        AxisParser,
+        SBIParser,
+        AmexParser,
+        KotakParser,
+    ):
+        registry.register(parser_cls())
+
+    if get_config().ai.enabled:
+        from backend.parsers.ai_parser import AIParser
+
+        registry.register(AIParser())
+
+    return registry
+
+
 # Global registry instance
 _registry: Optional[ParserRegistry] = None
 
@@ -74,7 +111,7 @@ def get_parser_registry() -> ParserRegistry:
     """Get the global parser registry instance (singleton pattern)."""
     global _registry
     if _registry is None:
-        _registry = ParserRegistry()
+        _registry = create_default_registry()
     return _registry
 
 
