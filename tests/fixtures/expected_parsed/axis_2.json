@@ -1,0 +1,9 @@
+{
+  "transaction_date": "2024-03-10T00:00:00",
+  "amount": "1200.00",
+  "merchant": "Croma Electronics",
+  "reference_number": "AXIS987654321",
+  "transaction_type": "debit",
+  "status": "posted",
+  "raw_email_subject": "Credit Card Transaction - Rs. 1,200.00 at Croma"
+}

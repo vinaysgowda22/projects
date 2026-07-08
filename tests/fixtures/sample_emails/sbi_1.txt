@@ -1,0 +1,14 @@
+From: alerts@sbi.co.in
+Subject: Transaction Alert - Debit Card Rs. 300.00 at Uber
+
+Dear Customer,
+
+Your SBI Debit Card ending 1357 has been used:
+
+Amount: Rs. 300.00
+Date: 01-Apr-2024
+At: Uber India
+
+Ref No: SBI123456789
+
+SBI

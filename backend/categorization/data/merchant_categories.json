@@ -1,0 +1,200 @@
+{
+  "food_dining": {
+    "exact_matches": [
+      "swiggy food delivery",
+      "zomato",
+      "uber eats",
+      "dominos pizza",
+      "pizza hut",
+      "kfc",
+      "mcdonalds",
+      "starbucks",
+      "cafe coffee day",
+      "barista",
+      "subway",
+      "burger king"
+    ],
+    "patterns": [
+      ".*swiggy.*",
+      ".*zomato.*",
+      ".*pizza.*",
+      ".*burger.*",
+      ".*restaurant.*",
+      ".*cafe.*",
+      ".*coffee.*"
+    ]
+  },
+  "shopping": {
+    "exact_matches": [
+      "amazon india",
+      "flipkart",
+      "myntra fashion",
+      "ajio",
+      "tata cliq",
+      "nykaa",
+      "croma electronics",
+      "apple india",
+      "nike store",
+      "adidas",
+      "reliance digital",
+      "croma"
+    ],
+    "patterns": [
+      ".*amazon.*",
+      ".*flipkart.*",
+      ".*myntra.*",
+      ".*ajio.*",
+      ".*nykaa.*",
+      ".*electronics.*",
+      ".*fashion.*"
+    ]
+  },
+  "transport": {
+    "exact_matches": [
+      "uber india",
+      "ola cabs",
+      "rapido",
+      "metro",
+      "indian railways",
+      "makemytrip",
+      "cleartrip",
+      "goibibo"
+    ],
+    "patterns": [
+      ".*uber.*",
+      ".*ola.*",
+      ".*rapido.*",
+      ".*cab.*",
+      ".*taxi.*",
+      ".*travel.*",
+      ".*railway.*"
+    ]
+  },
+  "utilities": {
+    "exact_matches": [
+      "electricity board",
+      "water board",
+      "gas agency",
+      "airtel",
+      "vodafone",
+      "jio",
+      "bsnl",
+      "act fibernet",
+      "siti cable"
+    ],
+    "patterns": [
+      ".*electricity.*",
+      ".*water.*",
+      ".*gas.*",
+      ".*broadband.*",
+      ".*internet.*",
+      ".*mobile.*",
+      ".*telecom.*"
+    ]
+  },
+  "entertainment": {
+    "exact_matches": [
+      "netflix subscription",
+      "amazon prime",
+      "disney hotstar",
+      "spotify",
+      "apple music",
+      "youtube premium",
+      "bookmyshow",
+      "pvr cinemas",
+      "inox"
+    ],
+    "patterns": [
+      ".*netflix.*",
+      ".*prime.*",
+      ".*hotstar.*",
+      ".*spotify.*",
+      ".*music.*",
+      ".*cinema.*",
+      ".*movie.*"
+    ]
+  },
+  "healthcare": {
+    "exact_matches": [
+      "apollo pharmacy",
+      "practo",
+      "pharmeasy",
+      "netmeds",
+      "medlife",
+      "hospital",
+      "clinic",
+      "diagnostics"
+    ],
+    "patterns": [
+      ".*pharmacy.*",
+      ".*medical.*",
+      ".*hospital.*",
+      ".*clinic.*",
+      ".*diagnostic.*",
+      ".*doctor.*"
+    ]
+  },
+  "education": {
+    "exact_matches": [
+      "coursera",
+      "udemy",
+      "byju",
+      "unacademy",
+      "vedantu",
+      "school",
+      "college",
+      "university"
+    ],
+    "patterns": [
+      ".*coursera.*",
+      ".*udemy.*",
+      ".*byju.*",
+      ".*unacademy.*",
+      ".*vedantu.*",
+      ".*school.*",
+      ".*college.*",
+      ".*university.*"
+    ]
+  },
+  "bills_payments": {
+    "exact_matches": [
+      "insurance premium",
+      "loan repayment",
+      "credit card payment",
+      "rent payment",
+      "society maintenance",
+      "property tax"
+    ],
+    "patterns": [
+      ".*insurance.*",
+      ".*loan.*",
+      ".*emi.*",
+      ".*rent.*",
+      ".*tax.*",
+      ".*maintenance.*"
+    ]
+  },
+  "groceries": {
+    "exact_matches": [
+      "bigbasket",
+      "grofers",
+      "blinkit",
+      "dunzo",
+      "spencers",
+      "more",
+      "reliance fresh"
+    ],
+    "patterns": [
+      ".*bigbasket.*",
+      ".*grofers.*",
+      ".*blinkit.*",
+      ".*dunzo.*",
+      ".*grocery.*",
+      ".*supermarket.*"
+    ]
+  },
+  "other": {
+    "exact_matches": [],
+    "patterns": []
+  }
+}

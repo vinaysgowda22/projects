@@ -1,0 +1,14 @@
+From: alerts@kotak.com
+Subject: Credit Card Transaction - Rs. 1,800.00 at Nike
+
+Dear Customer,
+
+Your Kotak Credit Card ending 3344 was used:
+
+Amount: Rs. 1,800.00
+Date: 15/06/2024
+Merchant: Nike Store
+
+Reference: KOTAK987654321
+
+Kotak Bank

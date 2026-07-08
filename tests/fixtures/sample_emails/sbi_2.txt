@@ -1,0 +1,14 @@
+From: alerts@sbi.co.in
+Subject: Credit Card Transaction - Rs. 2,500.00 at Amazon
+
+Dear Customer,
+
+Your SBI Credit Card ending 8642 was used:
+
+Amount: Rs. 2,500.00
+Date: 05/04/2024
+Merchant: Amazon India
+
+Reference: SBI987654321
+
+SBI

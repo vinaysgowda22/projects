@@ -1,0 +1,14 @@
+From: email@americanexpress.com
+Subject: Transaction Alert - Card used for USD 50.00 at Netflix
+
+Dear Cardmember,
+
+Your American Express Card ending 9999 has been used:
+
+Amount: USD 50.00
+Date: 20-May-2024
+At: Netflix Subscription
+
+Ref No: AMEX123456789
+
+American Express

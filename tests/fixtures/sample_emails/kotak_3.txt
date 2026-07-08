@@ -1,0 +1,14 @@
+From: alerts@kotak.com
+Subject: Account Debit - Rs. 3,500.00
+
+Dear Customer,
+
+Your Kotak Savings Account has been debited:
+
+Amount: Rs. 3,500.00
+Date: 20-Jun-2024
+To: Rent Payment
+
+Ref: KOTAK456123789
+
+Kotak Bank

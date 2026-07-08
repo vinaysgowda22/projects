@@ -1,0 +1,14 @@
+From: alerts@axisbank.com
+Subject: Credit Card Transaction - Rs. 1,200.00 at Croma
+
+Dear Customer,
+
+Your Axis Credit Card ending 2468 was used:
+
+Amount: Rs. 1,200.00
+Date: 10/03/2024
+Merchant: Croma Electronics
+
+Reference: AXIS987654321
+
+Axis Bank

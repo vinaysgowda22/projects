@@ -1,0 +1,9 @@
+{
+  "transaction_date": "2024-04-05T00:00:00",
+  "amount": "2500.00",
+  "merchant": "Amazon India",
+  "reference_number": "SBI987654321",
+  "transaction_type": "debit",
+  "status": "posted",
+  "raw_email_subject": "Credit Card Transaction - Rs. 2,500.00 at Amazon"
+}

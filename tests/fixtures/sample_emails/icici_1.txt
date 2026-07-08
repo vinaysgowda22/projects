@@ -1,0 +1,14 @@
+From: alerts@icicibank.com
+Subject: Transaction Alert - Debit Card used for Rs. 750.50 at Swiggy
+
+Dear Customer,
+
+Your ICICI Bank Debit Card ending 9012 has been used:
+
+Amount: Rs. 750.50
+Date: 10-Feb-2024
+At: Swiggy Food Delivery
+
+Ref No: ICICI112233445
+
+ICICI Bank

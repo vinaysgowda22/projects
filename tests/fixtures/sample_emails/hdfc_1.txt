@@ -1,0 +1,17 @@
+From: alerts@hdfcbank.com
+Subject: Transaction Alert - Debit Card used for Rs. 1,234.56 at Amazon
+
+Dear Customer,
+
+Your HDFC Bank Debit Card ending 1234 has been used for the following transaction:
+
+Amount: Rs. 1,234.56
+Date: 15-Jan-2024
+At: Amazon India
+
+Ref No: HDFC123456789
+
+If you did not authorize this transaction, please call our customer care immediately.
+
+Regards,
+HDFC Bank

@@ -1,0 +1,14 @@
+From: alerts@axisbank.com
+Subject: Transaction Alert - Debit Card Rs. 450.00 at Zomato
+
+Dear Customer,
+
+Your Axis Bank Debit Card ending 7890 has been used:
+
+Amount: Rs. 450.00
+Date: 05-Mar-2024
+At: Zomato
+
+Ref No: AXIS123456789
+
+Axis Bank

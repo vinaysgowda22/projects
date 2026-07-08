@@ -1,0 +1,14 @@
+From: alerts@axisbank.com
+Subject: Account Debit - Rs. 5,000.00
+
+Dear Customer,
+
+Your Axis Savings Account has been debited:
+
+Amount: Rs. 5,000.00
+Date: 15-Mar-2024
+To: Insurance Premium
+
+Ref: AXIS456123789
+
+Axis Bank

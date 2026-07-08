@@ -1,0 +1,9 @@
+{
+  "transaction_date": "2024-05-20T00:00:00",
+  "amount": "50.00",
+  "merchant": "Netflix Subscription",
+  "account_identifier": "9999",
+  "reference_number": "AMEX123456789",
+  "status": "posted",
+  "raw_email_subject": "Transaction Alert - Card used for USD 50.00 at Netflix"
+}

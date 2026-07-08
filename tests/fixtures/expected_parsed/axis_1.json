@@ -1,0 +1,10 @@
+{
+  "transaction_date": "2024-03-05T00:00:00",
+  "amount": "450.00",
+  "merchant": "Zomato",
+  "account_identifier": "7890",
+  "reference_number": "AXIS123456789",
+  "transaction_type": "debit",
+  "status": "posted",
+  "raw_email_subject": "Transaction Alert - Debit Card Rs. 450.00 at Zomato"
+}

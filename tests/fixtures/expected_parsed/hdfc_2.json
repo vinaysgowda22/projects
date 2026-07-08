@@ -1,0 +1,10 @@
+{
+  "transaction_date": "2024-01-20T00:00:00",
+  "amount": "500.00",
+  "merchant": "Flipkart Pvt Ltd",
+  "account_identifier": "5678",
+  "reference_number": "HDFC987654321",
+  "transaction_type": "debit",
+  "status": "posted",
+  "raw_email_subject": "Credit Card Transaction Alert - Rs. 500.00 at Flipkart"
+}

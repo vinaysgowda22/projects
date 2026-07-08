@@ -1,0 +1,14 @@
+From: alerts@icicibank.com
+Subject: Credit Card Transaction - Rs. 3,000.00 at Myntra
+
+Dear Customer,
+
+Your ICICI Credit Card ending 3456 was used:
+
+Amount: Rs. 3,000.00
+Date: 15/02/2024
+Merchant: Myntra Fashion
+
+Reference: ICICI998877665
+
+ICICI Bank

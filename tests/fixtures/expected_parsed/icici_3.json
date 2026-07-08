@@ -1,0 +1,9 @@
+{
+  "transaction_date": "2024-02-20T00:00:00",
+  "amount": "10000.00",
+  "merchant": "Salary Transfer",
+  "reference_number": "ICICI554433221",
+  "transaction_type": "credit",
+  "status": "posted",
+  "raw_email_subject": "Account Credit - Rs. 10,000.00"
+}

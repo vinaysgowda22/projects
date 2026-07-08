@@ -1,0 +1,16 @@
+From: alerts@hdfcbank.com
+Subject: Credit Card Transaction Alert - Rs. 500.00 at Flipkart
+
+Dear Customer,
+
+Your HDFC Credit Card ending 5678 has been used:
+
+Amount: Rs. 500.00
+Date: 20/01/2024
+Merchant: Flipkart Pvt Ltd
+
+Reference: HDFC987654321
+
+Thank you for using HDFC Bank.
+
+HDFC Bank

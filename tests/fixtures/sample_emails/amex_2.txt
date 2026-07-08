@@ -1,0 +1,14 @@
+From: alerts@americanexpress.com
+Subject: Card Transaction - INR 4,500.00 at Apple Store
+
+Dear Cardmember,
+
+Your American Express Card ending 8888 was used:
+
+Amount: INR 4,500.00
+Date: 25/05/2024
+Merchant: Apple India
+
+Reference: AMEX987654321
+
+American Express

@@ -1,0 +1,14 @@
+From: alerts@hdfcbank.com
+Subject: Account Debit - Rs. 2,500.00
+
+Dear Customer,
+
+Your HDFC Savings Account has been debited:
+
+Amount: Rs. 2,500.00
+Date: 25-Jan-2024
+To: Electricity Board
+
+Ref: HDFC456123789
+
+HDFC Bank

@@ -1,0 +1,9 @@
+{
+  "transaction_date": "2024-05-25T00:00:00",
+  "amount": "4500.00",
+  "merchant": "Apple India",
+  "account_identifier": "8888",
+  "reference_number": "AMEX987654321",
+  "status": "posted",
+  "raw_email_subject": "Card Transaction - INR 4,500.00 at Apple Store"
+}

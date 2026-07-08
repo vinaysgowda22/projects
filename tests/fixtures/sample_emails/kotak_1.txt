@@ -1,0 +1,14 @@
+From: alerts@kotak.com
+Subject: Transaction Alert - Debit Card Rs. 600.00 at Ola
+
+Dear Customer,
+
+Your Kotak Debit Card ending 1122 has been used:
+
+Amount: Rs. 600.00
+Date: 10-Jun-2024
+At: Ola Cabs
+
+Ref No: KOTAK123456789
+
+Kotak Bank

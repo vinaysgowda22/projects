@@ -1,0 +1,9 @@
+{
+  "transaction_date": "2024-06-15T00:00:00",
+  "amount": "1800.00",
+  "merchant": "Nike Store",
+  "account_identifier": "3344",
+  "reference_number": "KOTAK987654321",
+  "status": "posted",
+  "raw_email_subject": "Credit Card Transaction - Rs. 1,800.00 at Nike"
+}

@@ -1,0 +1,14 @@
+From: alerts@icicibank.com
+Subject: Account Credit - Rs. 10,000.00
+
+Dear Customer,
+
+Your ICICI Savings Account has been credited:
+
+Amount: Rs. 10,000.00
+Date: 20-Feb-2024
+From: Salary Transfer
+
+Ref: ICICI554433221
+
+ICICI Bank
