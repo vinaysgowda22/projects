@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  launchd LaunchAgent for the Expense Intelligence platform (spec §5.9).
+
+  Install as a per-user agent (runs as the logged-in user, NOT root):
+    1. Edit the paths below to point at your clone and shell.
+    2. cp deploy/com.expenseintelligence.agent.plist ~/Library/LaunchAgents/
+    3. launchctl load ~/Library/LaunchAgents/com.expenseintelligence.agent.plist
+
+  Do not store secrets in this file; the launch script loads them from .env
+  (which is gitignored) or the macOS Keychain.
+-->
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.expenseintelligence.agent</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <!-- Replace with the absolute path to your clone. -->
+      <string>/Users/CHANGE_ME/projects/scripts/launch.sh</string>
+    </array>
+
+    <!-- Run at login and keep it alive. -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Replace with the absolute path to your clone. -->
+    <key>WorkingDirectory</key>
+    <string>/Users/CHANGE_ME/projects</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/CHANGE_ME/projects/logs/agent.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/CHANGE_ME/projects/logs/agent.err.log</string>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+  </dict>
+</plist>
