@@ -66,6 +66,9 @@ backend/migrations/versions/*.pyc
 config/gmail_credentials.json
 !config/gmail_credentials.example.json
 
+# Learned merchant->category mappings (runtime data)
+config/merchant_mapping.json
+
 # Backup exports
 *.backup
 *.encrypted

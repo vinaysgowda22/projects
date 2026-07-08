@@ -7,10 +7,17 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
+from backend.categorization import get_category_classifier
 from backend.database import get_session
 from backend.repositories.transaction_repository import TransactionRepository
 
 router = APIRouter()
+
+
+class CategoryCorrection(BaseModel):
+    """Schema for correcting a transaction's category."""
+
+    category: str
 
 
 class TransactionCreate(BaseModel):
@@ -105,6 +112,29 @@ async def get_transaction(transaction_id: int):
             raise HTTPException(status_code=404, detail="Transaction not found")
 
         return TransactionResponse.model_validate(transaction)
+
+
+@router.patch("/{transaction_id}/category", response_model=TransactionResponse)
+async def correct_transaction_category(
+    transaction_id: int, correction: CategoryCorrection
+):
+    """Correct a transaction's category and learn the merchant mapping.
+
+    The corrected category is applied to this transaction and persisted as a
+    learned merchant->category mapping (spec §6.5), so future transactions from
+    the same merchant are categorized the same way without asking again.
+    """
+    with get_session().__enter__() as session:
+        repo = TransactionRepository(session)
+        transaction = repo.get_by_id(transaction_id)
+
+        if not transaction:
+            raise HTTPException(status_code=404, detail="Transaction not found")
+
+        updated = repo.update(transaction, category=correction.category)
+        get_category_classifier().learn(updated.merchant, correction.category)
+
+        return TransactionResponse.model_validate(updated)
 
 
 @router.get("/recent/", response_model=List[TransactionResponse])
