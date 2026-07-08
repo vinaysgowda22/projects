@@ -172,9 +172,7 @@ def main():
             "Navigate",
             [
                 "📊 Dashboard",
-                "🧾 Transactions",
-                "🏦 Accounts",
-                "📈 Analytics",
+                "🧭 Explore",
                 "🎯 Budgets",
                 "⚙️ Settings",
             ],
@@ -183,13 +181,27 @@ def main():
 
     pages = {
         "📊 Dashboard": show_dashboard,
-        "🧾 Transactions": show_transactions,
-        "🏦 Accounts": show_accounts,
-        "📈 Analytics": show_analytics,
+        "🧭 Explore": show_explore,
         "🎯 Budgets": show_budgets,
         "⚙️ Settings": show_settings,
     }
     pages[page]()
+
+
+def show_explore():
+    """Combined page: transactions, analytics, and accounts under one roof."""
+    st.title("Explore")
+    st.caption("Transactions, analytics, and accounts in one place")
+
+    tab_txns, tab_analytics, tab_accounts = st.tabs(
+        ["🧾 Transactions", "📈 Analytics", "🏦 Accounts"]
+    )
+    with tab_txns:
+        show_transactions()
+    with tab_analytics:
+        show_analytics()
+    with tab_accounts:
+        show_accounts()
 
 
 def show_dashboard():
@@ -341,8 +353,6 @@ def show_dashboard():
 
 def show_transactions():
     """Show transactions page."""
-    st.title("Transactions")
-
     col1, col2 = st.columns([1, 3])
     with col1:
         limit = st.slider("Show most recent", 10, 200, 50, step=10)
@@ -384,8 +394,6 @@ def show_transactions():
 
 def show_accounts():
     """Show accounts page."""
-    st.title("Accounts")
-
     with get_session().__enter__() as session:
         accounts = AccountRepository(session).get_all()
         rows = [
@@ -421,8 +429,6 @@ def show_accounts():
 
 def show_analytics():
     """Show analytics page."""
-    st.title("Analytics")
-
     analytics = get_analytics_engine()
 
     col1, col2 = st.columns(2)
