@@ -8,10 +8,11 @@ from sqlalchemy import engine_from_config, pool
 # Add the project root to sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+# Import all models to ensure they're registered with Base
+import backend.models  # noqa: F401  (registers all tables on Base.metadata)
+
 # Import models and config
 from backend.config import get_config
-
-# Import all models to ensure they're registered with Base
 from backend.models.base import Base
 
 # this is the Alembic Config object, which provides

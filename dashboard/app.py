@@ -1,6 +1,7 @@
 """Streamlit dashboard for Expense Intelligence."""
 
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 import streamlit as st
 
@@ -24,7 +25,14 @@ def main():
     # Sidebar navigation
     page = st.sidebar.radio(
         "Navigate",
-        ["Dashboard", "Transactions", "Accounts", "Analytics", "Settings"],
+        [
+            "Dashboard",
+            "Transactions",
+            "Accounts",
+            "Analytics",
+            "Budgets",
+            "Settings",
+        ],
     )
 
     if page == "Dashboard":
@@ -35,6 +43,8 @@ def main():
         show_accounts()
     elif page == "Analytics":
         show_analytics()
+    elif page == "Budgets":
+        show_budgets()
     elif page == "Settings":
         show_settings()
 
@@ -173,6 +183,55 @@ def show_analytics():
         df = pd.DataFrame(daily_spending)
         fig = px.bar(df, x="date", y="total", title="Daily Spending")
         st.plotly_chart(fig, use_container_width=True)
+
+
+def show_budgets():
+    """Show budgets page: set per-category budgets and track progress."""
+    st.header("Budgets")
+
+    from backend.categorization import get_category_classifier
+    from backend.database import get_session
+    from backend.repositories.budget_repository import BudgetRepository
+
+    analytics = get_analytics_engine()
+
+    # Add / update a budget
+    st.subheader("Set a Budget")
+    categories = get_category_classifier().get_all_categories()
+    with st.form("add_budget"):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            category = st.selectbox("Category", categories)
+        with col2:
+            amount = st.number_input("Monthly amount (₹)", min_value=0.0, step=100.0)
+        with col3:
+            period = st.selectbox("Period", ["monthly", "weekly", "yearly"])
+        if st.form_submit_button("Save budget") and amount > 0:
+            with get_session().__enter__() as session:
+                BudgetRepository(session).upsert(
+                    category=category, amount=Decimal(str(amount)), period=period
+                )
+            st.success(f"Budget saved for {category}.")
+
+    # Budget vs. actual (current period)
+    st.subheader("This Period")
+    status = analytics.get_budget_status()
+
+    if not status:
+        st.info("No active budgets yet. Add one above.")
+        return
+
+    for item in status:
+        spent = float(item["spent"])
+        budget = float(item["budget"])
+        label = (
+            f"**{item['category']}** — ₹{spent:,.2f} / ₹{budget:,.2f} "
+            f"({item['percent_used']}%)"
+        )
+        if item["over_budget"]:
+            label += " ⚠️ over budget"
+        st.write(label)
+        st.progress(min(item["percent_used"] / 100, 1.0))
 
 
 def show_settings():

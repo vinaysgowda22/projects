@@ -1,6 +1,7 @@
 """SQLAlchemy models for Expense Intelligence platform."""
 
 from backend.models.account import Account
+from backend.models.budget import Budget
 from backend.models.failed_email import FailedEmail
 from backend.models.setting import Setting
 from backend.models.tag import Tag, TransactionTag
@@ -8,6 +9,7 @@ from backend.models.transaction import Transaction
 
 __all__ = [
     "Account",
+    "Budget",
     "FailedEmail",
     "Setting",
     "Tag",
