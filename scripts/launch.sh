@@ -11,6 +11,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 cd "${REPO_ROOT}"
 
+# Ensure the repo root is importable (Streamlit puts the script's dir on
+# sys.path, not the cwd, so `import backend` would otherwise fail).
+export PYTHONPATH="${REPO_ROOT}:${PYTHONPATH:-}"
+
 # Activate the virtualenv if present.
 if [[ -d ".venv" ]]; then
   # shellcheck disable=SC1091

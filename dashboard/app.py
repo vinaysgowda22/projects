@@ -1,13 +1,21 @@
 """Streamlit dashboard for Expense Intelligence."""
 
+import sys
 from datetime import datetime, timedelta
 from decimal import Decimal
+from pathlib import Path
 
-import streamlit as st
+# Streamlit puts the script's directory on sys.path, not the repo root, so make
+# the repo root importable regardless of how the dashboard is launched.
+_REPO_ROOT = str(Path(__file__).resolve().parent.parent)
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
 
-from backend.analytics import get_analytics_engine
-from backend.api.routes.accounts import list_accounts
-from backend.api.routes.transactions import list_transactions
+import streamlit as st  # noqa: E402
+
+from backend.analytics import get_analytics_engine  # noqa: E402
+from backend.api.routes.accounts import list_accounts  # noqa: E402
+from backend.api.routes.transactions import list_transactions  # noqa: E402
 
 st.set_page_config(
     page_title="Expense Intelligence",
