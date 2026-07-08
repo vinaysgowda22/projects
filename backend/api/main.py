@@ -5,7 +5,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from loguru import logger
 
-from backend.api.routes import accounts, failed_emails, settings, tags, transactions
+from backend.api.routes import (
+    accounts,
+    budgets,
+    failed_emails,
+    settings,
+    tags,
+    transactions,
+)
 from backend.database import init_db
 
 
@@ -35,6 +42,7 @@ app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
 app.include_router(
     transactions.router, prefix="/api/transactions", tags=["transactions"]
 )
+app.include_router(budgets.router, prefix="/api/budgets", tags=["budgets"])
 app.include_router(tags.router, prefix="/api/tags", tags=["tags"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 app.include_router(

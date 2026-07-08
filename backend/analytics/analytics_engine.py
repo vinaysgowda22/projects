@@ -6,6 +6,7 @@ from decimal import Decimal
 from typing import Optional
 
 from backend.database import get_session
+from backend.repositories.budget_repository import BudgetRepository
 from backend.repositories.transaction_repository import TransactionRepository
 
 
@@ -79,6 +80,51 @@ class AnalyticsEngine:
                     spending_by_category[tx.category] += tx.amount
 
             return dict(spending_by_category)
+
+    def get_budget_status(
+        self,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+    ) -> list[dict]:
+        """Compare active budgets against actual spending in a period.
+
+        Args:
+            start_date: Start of the period (defaults to start of current month).
+            end_date: End of the period (defaults to now).
+
+        Returns:
+            List of dicts per active budget with category, budget, spent,
+            remaining, percent_used, and an over_budget flag.
+        """
+        if start_date is None:
+            now = datetime.now()
+            start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        if end_date is None:
+            end_date = datetime.now()
+
+        spending = self.get_spending_by_category(start_date, end_date)
+
+        with get_session().__enter__() as session:
+            budget_repo = BudgetRepository(session)
+            budgets = budget_repo.get_active()
+
+            status = []
+            for budget in budgets:
+                spent = spending.get(budget.category, Decimal("0"))
+                remaining = budget.amount - spent
+                percent = float(spent / budget.amount * 100) if budget.amount else 0.0
+                status.append(
+                    {
+                        "category": budget.category,
+                        "period": budget.period,
+                        "budget": budget.amount,
+                        "spent": spent,
+                        "remaining": remaining,
+                        "percent_used": round(percent, 1),
+                        "over_budget": spent > budget.amount,
+                    }
+                )
+            return status
 
     def get_spending_by_merchant(
         self,
