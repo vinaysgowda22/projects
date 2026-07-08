@@ -5,8 +5,13 @@ import re
 from pathlib import Path
 from typing import Optional
 
+from loguru import logger
 from rapidfuzz import fuzz, process
 
+from backend.categorization.merchant_mapping_store import (
+    MerchantMappingStore,
+    get_merchant_mapping_store,
+)
 from backend.categorization.merchant_normalizer import (
     MerchantNormalizer,
     get_merchant_normalizer,
@@ -14,15 +19,22 @@ from backend.categorization.merchant_normalizer import (
 
 
 class CategoryClassifier:
-    """3-layer merchant category classifier."""
+    """Layered merchant category classifier with learned-mapping support."""
 
-    def __init__(self, normalizer: Optional[MerchantNormalizer] = None):
+    def __init__(
+        self,
+        normalizer: Optional[MerchantNormalizer] = None,
+        mapping_store: Optional[MerchantMappingStore] = None,
+    ):
         """Initialize the category classifier.
 
         Args:
             normalizer: MerchantNormalizer instance. If None, uses global instance.
+            mapping_store: Learned merchant->category store. If None, uses the
+                global instance.
         """
         self.normalizer = normalizer or get_merchant_normalizer()
+        self.mapping_store = mapping_store or get_merchant_mapping_store()
         self.categories = self._load_categories()
 
     def _load_categories(self) -> dict:
@@ -32,11 +44,13 @@ class CategoryClassifier:
             return json.load(f)
 
     def classify(self, merchant: str) -> str:
-        """Classify a merchant into a category using 3-layer approach.
+        """Classify a merchant into a category using a layered approach.
 
+        Layer 0: Learned mappings (user corrections + cached AI results)
         Layer 1: Exact match after normalization
         Layer 2: Fuzzy match using string similarity
-        Layer 3: Pattern-based inference
+        Layer 3a: Pattern-based inference
+        Layer 3b: AI classification (optional), cached back to the store
 
         Args:
             merchant: The merchant name to classify.
@@ -49,6 +63,11 @@ class CategoryClassifier:
 
         normalized = self.normalizer.normalize(merchant)
 
+        # Layer 0: Learned mappings (user corrections + cached AI results)
+        category = self.mapping_store.get(normalized)
+        if category:
+            return category
+
         # Layer 1: Exact match
         category = self._exact_match(normalized)
         if category:
@@ -59,13 +78,80 @@ class CategoryClassifier:
         if category:
             return category
 
-        # Layer 3: Pattern match
+        # Layer 3a: Pattern match
         category = self._pattern_match(normalized)
         if category:
             return category
 
+        # Layer 3b: AI classification (optional), cached back to the store
+        category = self._ai_match(normalized)
+        if category:
+            self.mapping_store.set(normalized, category)
+            return category
+
         # Default: other
         return "other"
+
+    def learn(self, merchant: str, category: str) -> None:
+        """Persist a user correction so future transactions use it.
+
+        Args:
+            merchant: The raw merchant name (will be normalized).
+            category: The correct category chosen by the user.
+        """
+        if not merchant or not category:
+            return
+        normalized = self.normalizer.normalize(merchant)
+        self.mapping_store.set(normalized, category)
+
+    def _ai_match(self, normalized_merchant: str) -> Optional[str]:
+        """Layer 3b: classify an unknown merchant via the AI provider.
+
+        Only runs when AI features are enabled. The LLM is constrained to pick
+        from the known category list; any out-of-list answer is rejected.
+
+        Args:
+            normalized_merchant: Normalized merchant name.
+
+        Returns:
+            A valid category name, or None if AI is disabled/unavailable or the
+            response is not a recognized category.
+        """
+        from backend.config import get_config
+
+        config = get_config()
+        if not config.ai.enabled:
+            return None
+
+        categories = self.get_all_categories()
+        try:
+            from openai import OpenAI
+
+            client = OpenAI(api_key=config.ai.api_key)
+            response = client.chat.completions.create(
+                model=config.ai.model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You categorize merchant names. Reply with exactly "
+                            "one category from this list and nothing else: "
+                            + ", ".join(categories)
+                        ),
+                    },
+                    {"role": "user", "content": normalized_merchant},
+                ],
+                temperature=0,
+            )
+            answer = (response.choices[0].message.content or "").strip().lower()
+        except Exception as e:
+            logger.warning(f"AI category classification failed: {e}")
+            return None
+
+        if answer in categories:
+            return answer
+        logger.warning(f"AI returned unknown category '{answer}'; ignoring")
+        return None
 
     def _exact_match(self, normalized_merchant: str) -> Optional[str]:
         """Layer 1: Exact match against known merchants.
