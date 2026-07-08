@@ -34,43 +34,107 @@ st.set_page_config(
 # Colour palette used across the charts for a consistent look.
 _PALETTE = px.colors.qualitative.Set2
 
+# Skeuomorphic styling: soft depth, gradients, tactile controls, felt sidebar.
 _CSS = """
 <style>
-    /* Tighten the default top padding. */
-    .block-container { padding-top: 2.5rem; padding-bottom: 3rem; max-width: 1200px; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-    /* Metric cards. */
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+
+    /* Paper-like app background with a subtle radial sheen. */
+    .stApp {
+        background:
+            radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #eef1f6 55%, #e6eaf1 100%);
+    }
+    .block-container { padding-top: 2.2rem; padding-bottom: 3rem; max-width: 1200px; }
+
+    /* ---- Skeuomorphic metric tiles ---- */
     div[data-testid="stMetric"] {
-        background: #ffffff;
-        border: 1px solid #e6e8eb;
-        border-radius: 12px;
-        padding: 18px 20px;
-        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+        background: linear-gradient(180deg, #ffffff 0%, #f2f5fa 100%);
+        border: 1px solid #d7dde8;
+        border-radius: 16px;
+        padding: 18px 22px;
+        box-shadow:
+            0 1px 0 #ffffff inset,
+            0 10px 20px -12px rgba(16, 24, 40, 0.35),
+            0 2px 4px rgba(16, 24, 40, 0.06);
     }
     div[data-testid="stMetricLabel"] p {
-        font-size: 0.8rem; color: #667085; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 0.04em;
+        font-size: 0.78rem; color: #5b6472; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.06em;
     }
-    div[data-testid="stMetricValue"] { font-size: 1.7rem; font-weight: 700; }
+    div[data-testid="stMetricValue"] {
+        font-size: 1.8rem; font-weight: 800; color: #0d1b2a;
+        text-shadow: 0 1px 0 #ffffff;
+    }
 
-    /* Sidebar. */
-    section[data-testid="stSidebar"] { background: #0f172a; }
-    section[data-testid="stSidebar"] * { color: #e2e8f0 !important; }
+    /* ---- Felt / leather sidebar ---- */
+    section[data-testid="stSidebar"] {
+        background:
+            linear-gradient(180deg, #17304d 0%, #0d1b2e 100%);
+        border-right: 1px solid #0a1522;
+        box-shadow: inset -8px 0 16px -10px rgba(0,0,0,0.6);
+    }
+    section[data-testid="stSidebar"] * { color: #dbe4f0 !important; }
+    section[data-testid="stSidebar"] .stRadio label {
+        padding: 8px 12px; border-radius: 10px; margin-bottom: 2px;
+        transition: background 0.15s ease;
+    }
+    section[data-testid="stSidebar"] .stRadio label:hover {
+        background: rgba(255,255,255,0.06);
+    }
 
-    /* Card helper used for custom blocks. */
+    /* ---- Embossed card helper ---- */
     .ei-card {
-        background: #ffffff; border: 1px solid #e6e8eb; border-radius: 12px;
-        padding: 16px 20px; margin-bottom: 12px;
-        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+        background: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+        border: 1px solid #d7dde8; border-radius: 14px;
+        padding: 16px 20px; margin-bottom: 14px;
+        box-shadow:
+            0 1px 0 #ffffff inset,
+            0 12px 22px -16px rgba(16, 24, 40, 0.45),
+            0 2px 4px rgba(16, 24, 40, 0.05);
     }
     .ei-card .title { font-weight: 700; font-size: 1rem; color: #101828; }
     .ei-card .sub { color: #667085; font-size: 0.85rem; }
+
+    /* ---- Pills / chips ---- */
     .ei-pill {
-        display: inline-block; padding: 2px 10px; border-radius: 999px;
-        font-size: 0.75rem; font-weight: 600;
+        display: inline-block; padding: 3px 11px; border-radius: 999px;
+        font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
+        box-shadow: 0 1px 0 #ffffff inset, 0 1px 2px rgba(0,0,0,0.08);
     }
-    .ei-pill.ok { background: #ecfdf3; color: #027a48; }
-    .ei-pill.warn { background: #fef3f2; color: #b42318; }
+    .ei-pill.ok { background: linear-gradient(180deg,#e9fbf0,#d1fadf); color: #05603a; }
+    .ei-pill.warn { background: linear-gradient(180deg,#fef0ef,#fdd9d6); color: #912018; }
+
+    /* ---- Tactile primary button ---- */
+    .stButton > button, .stFormSubmitButton > button {
+        background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+        color: #ffffff; border: 1px solid #1d4ed8; border-radius: 12px;
+        font-weight: 700; padding: 0.5rem 1.1rem;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset,
+                    0 6px 14px -6px rgba(37, 99, 235, 0.6);
+    }
+    .stButton > button:hover, .stFormSubmitButton > button:hover {
+        filter: brightness(1.05);
+    }
+    .stButton > button:active, .stFormSubmitButton > button:active {
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25) inset; transform: translateY(1px);
+    }
+
+    /* ---- Skeuomorphic progress groove ---- */
+    div[data-testid="stProgress"] > div > div {
+        background: linear-gradient(180deg, #e2e8f0, #cbd5e1);
+        border-radius: 999px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.18);
+    }
+    div[data-testid="stProgress"] > div > div > div {
+        background: linear-gradient(180deg, #60a5fa, #2563eb);
+        border-radius: 999px;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset;
+    }
+
+    /* Section headings. */
+    h3 { color: #17304d; font-weight: 800; }
 </style>
 """
 
@@ -78,6 +142,23 @@ _CSS = """
 def _fmt(amount) -> str:
     """Format a number as Indian rupees."""
     return f"₹{float(amount):,.2f}"
+
+
+def _month_bounds(months_ago: int = 0):
+    """Return (start, end) datetimes for the month `months_ago` before now."""
+    now = datetime.now()
+    year = now.year
+    month = now.month - months_ago
+    while month <= 0:
+        month += 12
+        year -= 1
+    start = datetime(year, month, 1)
+    if month == 12:
+        end = datetime(year + 1, 1, 1) - timedelta(seconds=1)
+    else:
+        end = datetime(year, month + 1, 1) - timedelta(seconds=1)
+    # Cap the current month at "now".
+    return start, min(end, now)
 
 
 def main():
@@ -90,82 +171,163 @@ def main():
         page = st.radio(
             "Navigate",
             [
-                "Dashboard",
-                "Transactions",
-                "Accounts",
-                "Analytics",
-                "Budgets",
-                "Settings",
+                "📊 Dashboard",
+                "🧾 Transactions",
+                "🏦 Accounts",
+                "📈 Analytics",
+                "🎯 Budgets",
+                "⚙️ Settings",
             ],
             label_visibility="collapsed",
         )
 
     pages = {
-        "Dashboard": show_dashboard,
-        "Transactions": show_transactions,
-        "Accounts": show_accounts,
-        "Analytics": show_analytics,
-        "Budgets": show_budgets,
-        "Settings": show_settings,
+        "📊 Dashboard": show_dashboard,
+        "🧾 Transactions": show_transactions,
+        "🏦 Accounts": show_accounts,
+        "📈 Analytics": show_analytics,
+        "🎯 Budgets": show_budgets,
+        "⚙️ Settings": show_settings,
     }
     pages[page]()
 
 
 def show_dashboard():
-    """Show main dashboard with summary metrics."""
+    """Show main dashboard with summary metrics and month-over-month comparison."""
     st.title("Dashboard")
-    st.caption("Last 30 days")
+    st.caption("This month vs. last month")
 
     analytics = get_analytics_engine()
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=30)
-    summary = analytics.get_summary_metrics(start_date, end_date)
-    income_expense = summary["income_vs_expense"]
+    this_start, this_end = _month_bounds(0)
+    last_start, last_end = _month_bounds(1)
+
+    this_ie = analytics.get_income_vs_expense(this_start, this_end)
+    last_ie = analytics.get_income_vs_expense(last_start, last_end)
+
+    def _delta(cur, prev):
+        return _fmt(cur - prev) if prev is not None else None
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total Income", _fmt(income_expense["total_income"]))
-    col2.metric("Total Expense", _fmt(income_expense["total_expense"]))
-    col3.metric("Net", _fmt(income_expense["net"]))
+    col1.metric(
+        "Income (this month)",
+        _fmt(this_ie["total_income"]),
+        _delta(this_ie["total_income"], last_ie["total_income"]),
+    )
+    col2.metric(
+        "Expense (this month)",
+        _fmt(this_ie["total_expense"]),
+        _delta(this_ie["total_expense"], last_ie["total_expense"]),
+        delta_color="inverse",
+    )
+    col3.metric(
+        "Net (this month)",
+        _fmt(this_ie["net"]),
+        _delta(this_ie["net"], last_ie["net"]),
+    )
 
-    st.markdown("### Spending by category")
-    spending_by_category = summary["spending_by_category"]
-    left, right = st.columns([3, 2])
-    if spending_by_category:
-        categories = list(spending_by_category.keys())
-        amounts = [float(v) for v in spending_by_category.values()]
-        fig = px.pie(
-            values=amounts,
-            names=categories,
-            hole=0.55,
-            color_discrete_sequence=_PALETTE,
-        )
-        fig.update_layout(
-            margin=dict(t=10, b=10, l=10, r=10),
-            legend=dict(orientation="h", y=-0.1),
-            height=320,
-        )
-        left.plotly_chart(fig, use_container_width=True)
+    # ---- Comparison sheet: category spend this vs last month ----
+    st.markdown("### 📋 Category comparison sheet")
+    this_cat = {
+        k: float(v)
+        for k, v in analytics.get_spending_by_category(this_start, this_end).items()
+    }
+    last_cat = {
+        k: float(v)
+        for k, v in analytics.get_spending_by_category(last_start, last_end).items()
+    }
+    categories = sorted(set(this_cat) | set(last_cat))
 
-        ranked = sorted(
-            spending_by_category.items(), key=lambda kv: float(kv[1]), reverse=True
+    if categories:
+        rows = []
+        for cat in categories:
+            cur = this_cat.get(cat, 0.0)
+            prev = last_cat.get(cat, 0.0)
+            change = cur - prev
+            pct = (change / prev * 100) if prev else (100.0 if cur else 0.0)
+            trend = "▲" if change > 0 else ("▼" if change < 0 else "—")
+            rows.append(
+                {
+                    "Category": cat,
+                    "This month": cur,
+                    "Last month": prev,
+                    "Change (₹)": change,
+                    "Change (%)": round(pct, 1),
+                    "Trend": trend,
+                }
+            )
+        df = pd.DataFrame(rows)
+
+        totals = {
+            "Category": "TOTAL",
+            "This month": df["This month"].sum(),
+            "Last month": df["Last month"].sum(),
+            "Change (₹)": df["Change (₹)"].sum(),
+            "Change (%)": round(
+                (
+                    (df["Change (₹)"].sum() / df["Last month"].sum() * 100)
+                    if df["Last month"].sum()
+                    else 0.0
+                ),
+                1,
+            ),
+            "Trend": "▲" if df["Change (₹)"].sum() > 0 else "▼",
+        }
+        df = pd.concat([df, pd.DataFrame([totals])], ignore_index=True)
+
+        def _style_change(val):
+            if isinstance(val, (int, float)):
+                if val > 0:
+                    return "color: #b42318; font-weight: 700;"
+                if val < 0:
+                    return "color: #05603a; font-weight: 700;"
+            return ""
+
+        styler = (
+            df.style.map(_style_change, subset=["Change (₹)", "Change (%)"])
+            .format(
+                {
+                    "This month": "₹{:,.0f}",
+                    "Last month": "₹{:,.0f}",
+                    "Change (₹)": "{:+,.0f}",
+                    "Change (%)": "{:+.1f}%",
+                }
+            )
+            .set_properties(
+                subset=pd.IndexSlice[df.index[-1], :],
+                **{"font-weight": "800", "background-color": "#eef2f7"},
+            )
         )
-        with right:
-            st.markdown("#### Top categories")
-            for category, amount in ranked[:6]:
-                st.markdown(
-                    f"<div class='ei-card'><span class='title'>{category}</span>"
-                    f"<br><span class='sub'>{_fmt(amount)}</span></div>",
-                    unsafe_allow_html=True,
-                )
+        st.dataframe(styler, use_container_width=True, hide_index=True)
+        st.caption("Higher spend than last month is red; lower is green.")
     else:
-        st.info("No spending data available for the selected period.")
+        st.info("No spending data yet — add transactions to see comparisons.")
 
-    st.markdown("### Detected subscriptions")
-    subscriptions = summary["subscriptions"]
-    if subscriptions:
-        cols = st.columns(3)
-        for i, sub in enumerate(subscriptions):
-            with cols[i % 3]:
+    # ---- Spending donut + subscriptions ----
+    left, right = st.columns([3, 2])
+    with left:
+        st.markdown("### 🍩 Spending by category (this month)")
+        if this_cat:
+            fig = px.pie(
+                values=list(this_cat.values()),
+                names=list(this_cat.keys()),
+                hole=0.58,
+                color_discrete_sequence=_PALETTE,
+            )
+            fig.update_layout(
+                margin=dict(t=10, b=10, l=10, r=10),
+                legend=dict(orientation="h", y=-0.1),
+                height=320,
+                paper_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("No spending data available.")
+
+    with right:
+        st.markdown("### 🔁 Subscriptions")
+        subscriptions = analytics.get_subscriptions()
+        if subscriptions:
+            for sub in subscriptions:
                 st.markdown(
                     f"<div class='ei-card'>"
                     f"<span class='title'>{sub['merchant'].title()}</span><br>"
@@ -173,15 +335,18 @@ def show_dashboard():
                     f"{sub['frequency']} · {sub['occurrences']}x</span></div>",
                     unsafe_allow_html=True,
                 )
-    else:
-        st.info("No subscriptions detected.")
+        else:
+            st.info("No subscriptions detected.")
 
 
 def show_transactions():
     """Show transactions page."""
     st.title("Transactions")
 
-    limit = st.slider("Show most recent", 10, 200, 50, step=10)
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        limit = st.slider("Show most recent", 10, 200, 50, step=10)
+
     with get_session().__enter__() as session:
         rows = [
             {
@@ -200,6 +365,13 @@ def show_transactions():
         return
 
     df = pd.DataFrame(rows)
+    debits = df[df["Type"] == "debit"]["Amount"].sum()
+    credits = df[df["Type"] == "credit"]["Amount"].sum()
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Shown", len(df))
+    c2.metric("Total debits", _fmt(debits), delta_color="inverse")
+    c3.metric("Total credits", _fmt(credits))
+
     st.dataframe(
         df,
         use_container_width=True,
@@ -262,13 +434,17 @@ def show_analytics():
     start_datetime = datetime.combine(start_date, datetime.min.time())
     end_datetime = datetime.combine(end_date, datetime.max.time())
 
-    st.markdown("### Monthly spending trend")
+    st.markdown("### 📈 Monthly spending trend")
     monthly_spending = analytics.get_monthly_spending(months=12)
     if monthly_spending:
         df = pd.DataFrame(monthly_spending)
-        fig = px.line(df, x="month", y="total", markers=True)
-        fig.update_traces(line_color="#3b82f6")
-        fig.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=300)
+        fig = px.area(df, x="month", y="total", markers=True)
+        fig.update_traces(line_color="#2563eb", fillcolor="rgba(37,99,235,0.15)")
+        fig.update_layout(
+            margin=dict(t=10, b=10, l=10, r=10),
+            height=300,
+            paper_bgcolor="rgba(0,0,0,0)",
+        )
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("No monthly data yet.")
@@ -276,7 +452,7 @@ def show_analytics():
     left, right = st.columns(2)
 
     with left:
-        st.markdown("### Top merchants")
+        st.markdown("### 🏪 Top merchants")
         top_merchants = analytics.get_spending_by_merchant(
             start_datetime, end_datetime, limit=10
         )
@@ -295,18 +471,23 @@ def show_analytics():
                 margin=dict(t=10, b=10, l=10, r=10),
                 height=320,
                 yaxis=dict(autorange="reversed"),
+                paper_bgcolor="rgba(0,0,0,0)",
             )
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No merchant data yet.")
 
     with right:
-        st.markdown("### Daily spending (30d)")
+        st.markdown("### 📅 Daily spending (30d)")
         daily_spending = analytics.get_daily_spending(days=30)
         if daily_spending:
             df = pd.DataFrame(daily_spending)
             fig = px.bar(df, x="date", y="total", color_discrete_sequence=["#10b981"])
-            fig.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=320)
+            fig.update_layout(
+                margin=dict(t=10, b=10, l=10, r=10),
+                height=320,
+                paper_bgcolor="rgba(0,0,0,0)",
+            )
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No daily data yet.")
@@ -318,7 +499,7 @@ def show_budgets():
 
     analytics = get_analytics_engine()
 
-    st.markdown("### Set a budget")
+    st.markdown("### 🎯 Set a budget")
     categories = get_category_classifier().get_all_categories()
     with st.form("add_budget"):
         col1, col2, col3 = st.columns(3)
@@ -335,16 +516,41 @@ def show_budgets():
                 )
             st.success(f"Budget saved for {category}.")
 
-    st.markdown("### This period")
+    st.markdown("### 📊 This period")
     status = analytics.get_budget_status()
     if not status:
         st.info("No active budgets yet. Add one above.")
         return
 
+    # Budget summary sheet.
+    sheet = pd.DataFrame(
+        [
+            {
+                "Category": s["category"],
+                "Budget": float(s["budget"]),
+                "Spent": float(s["spent"]),
+                "Remaining": float(s["remaining"]),
+                "Used (%)": s["percent_used"],
+                "Status": "Over budget" if s["over_budget"] else "On track",
+            }
+            for s in status
+        ]
+    )
+    st.dataframe(
+        sheet,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Budget": st.column_config.NumberColumn(format="₹%.0f"),
+            "Spent": st.column_config.NumberColumn(format="₹%.0f"),
+            "Remaining": st.column_config.NumberColumn(format="₹%.0f"),
+            "Used (%)": st.column_config.ProgressColumn(
+                "Used (%)", min_value=0, max_value=100, format="%.0f%%"
+            ),
+        },
+    )
+
     for item in status:
-        spent = float(item["spent"])
-        budget = float(item["budget"])
-        pct = item["percent_used"]
         pill = (
             "<span class='ei-pill warn'>Over budget</span>"
             if item["over_budget"]
@@ -352,10 +558,11 @@ def show_budgets():
         )
         st.markdown(
             f"<div class='ei-card'><span class='title'>{item['category']}</span> {pill}"
-            f"<br><span class='sub'>{_fmt(spent)} of {_fmt(budget)} · {pct}%</span></div>",
+            f"<br><span class='sub'>{_fmt(item['spent'])} of "
+            f"{_fmt(item['budget'])} · {item['percent_used']}%</span></div>",
             unsafe_allow_html=True,
         )
-        st.progress(min(pct / 100, 1.0))
+        st.progress(min(item["percent_used"] / 100, 1.0))
 
 
 def show_settings():
