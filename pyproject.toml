@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# Line length is managed by black (the formatter of record); black
+# intentionally leaves some long lines (e.g. long strings) unsplit.
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

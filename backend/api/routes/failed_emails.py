@@ -1,27 +1,26 @@
 """Failed emails API routes."""
 
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from backend.database import get_session
-from backend.models.failed_email import FailedEmail
 from backend.repositories.failed_email_repository import FailedEmailRepository
-
 
 router = APIRouter()
 
 
 class FailedEmailResponse(BaseModel):
     """Schema for failed email response."""
+
     id: int
     gmail_id: Optional[str]
     sender: Optional[str]
     subject: Optional[str]
     error_message: str
     processed_at: str
-    
+
     class Config:
         from_attributes = True
 
@@ -41,10 +40,10 @@ async def get_failed_email(email_id: int):
     with get_session().__enter__() as session:
         repo = FailedEmailRepository(session)
         email = repo.get_by_id(email_id)
-        
+
         if not email:
             raise HTTPException(status_code=404, detail="Failed email not found")
-        
+
         return FailedEmailResponse.model_validate(email)
 
 
@@ -54,9 +53,9 @@ async def delete_failed_email(email_id: int):
     with get_session().__enter__() as session:
         repo = FailedEmailRepository(session)
         email = repo.get_by_id(email_id)
-        
+
         if not email:
             raise HTTPException(status_code=404, detail="Failed email not found")
-        
+
         repo.delete(email)
         return {"message": "Failed email deleted successfully"}

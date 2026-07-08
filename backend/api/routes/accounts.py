@@ -4,18 +4,16 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
 
 from backend.database import get_session
-from backend.models.account import Account
 from backend.repositories.account_repository import AccountRepository
-
 
 router = APIRouter()
 
 
 class AccountCreate(BaseModel):
     """Schema for creating an account."""
+
     bank_name: str
     account_identifier: str
     account_type: str = "savings"
@@ -24,13 +22,14 @@ class AccountCreate(BaseModel):
 
 class AccountResponse(BaseModel):
     """Schema for account response."""
+
     id: int
     bank_name: str
     account_identifier: str
     account_type: str
     nickname: str
     is_active: bool
-    
+
     class Config:
         from_attributes = True
 
@@ -40,19 +39,19 @@ async def create_account(account: AccountCreate):
     """Create a new account."""
     with get_session().__enter__() as session:
         repo = AccountRepository(session)
-        
+
         # Check if account already exists
         existing = repo.get_by_identifier(account.bank_name, account.account_identifier)
         if existing:
             raise HTTPException(status_code=400, detail="Account already exists")
-        
+
         new_account = repo.create(
             bank_name=account.bank_name,
             account_identifier=account.account_identifier,
             account_type=account.account_type,
             nickname=account.nickname,
         )
-        
+
         return AccountResponse.model_validate(new_account)
 
 
@@ -71,10 +70,10 @@ async def get_account(account_id: int):
     with get_session().__enter__() as session:
         repo = AccountRepository(session)
         account = repo.get_by_id(account_id)
-        
+
         if not account:
             raise HTTPException(status_code=404, detail="Account not found")
-        
+
         return AccountResponse.model_validate(account)
 
 
@@ -84,10 +83,10 @@ async def update_account(account_id: int, account: AccountCreate):
     with get_session().__enter__() as session:
         repo = AccountRepository(session)
         existing = repo.get_by_id(account_id)
-        
+
         if not existing:
             raise HTTPException(status_code=404, detail="Account not found")
-        
+
         updated = repo.update(
             existing,
             bank_name=account.bank_name,
@@ -95,7 +94,7 @@ async def update_account(account_id: int, account: AccountCreate):
             account_type=account.account_type,
             nickname=account.nickname,
         )
-        
+
         return AccountResponse.model_validate(updated)
 
 
@@ -105,9 +104,9 @@ async def delete_account(account_id: int):
     with get_session().__enter__() as session:
         repo = AccountRepository(session)
         account = repo.get_by_id(account_id)
-        
+
         if not account:
             raise HTTPException(status_code=404, detail="Account not found")
-        
+
         repo.delete(account)
         return {"message": "Account deleted successfully"}

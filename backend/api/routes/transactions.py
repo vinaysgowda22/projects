@@ -8,15 +8,14 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
 from backend.database import get_session
-from backend.models.transaction import Transaction
 from backend.repositories.transaction_repository import TransactionRepository
-
 
 router = APIRouter()
 
 
 class TransactionCreate(BaseModel):
     """Schema for creating a transaction."""
+
     transaction_date: datetime
     amount: Decimal
     merchant: str
@@ -31,6 +30,7 @@ class TransactionCreate(BaseModel):
 
 class TransactionResponse(BaseModel):
     """Schema for transaction response."""
+
     id: int
     transaction_date: datetime
     amount: Decimal
@@ -44,7 +44,7 @@ class TransactionResponse(BaseModel):
     description: Optional[str]
     is_duplicate: bool
     possible_duplicate: bool
-    
+
     class Config:
         from_attributes = True
 
@@ -54,7 +54,7 @@ async def create_transaction(transaction: TransactionCreate):
     """Create a new transaction."""
     with get_session().__enter__() as session:
         repo = TransactionRepository(session)
-        
+
         new_transaction = repo.create(
             transaction_date=transaction.transaction_date,
             amount=transaction.amount,
@@ -67,7 +67,7 @@ async def create_transaction(transaction: TransactionCreate):
             status=transaction.status,
             description=transaction.description,
         )
-        
+
         return TransactionResponse.model_validate(new_transaction)
 
 
@@ -81,7 +81,7 @@ async def list_transactions(
     """List transactions with optional filters."""
     with get_session().__enter__() as session:
         repo = TransactionRepository(session)
-        
+
         if merchant or category:
             transactions = repo.search(
                 merchant=merchant,
@@ -90,7 +90,7 @@ async def list_transactions(
             )
         else:
             transactions = repo.get_all(limit=limit, offset=offset)
-        
+
         return [TransactionResponse.model_validate(tx) for tx in transactions]
 
 
@@ -100,10 +100,10 @@ async def get_transaction(transaction_id: int):
     with get_session().__enter__() as session:
         repo = TransactionRepository(session)
         transaction = repo.get_by_id(transaction_id)
-        
+
         if not transaction:
             raise HTTPException(status_code=404, detail="Transaction not found")
-        
+
         return TransactionResponse.model_validate(transaction)
 
 
@@ -117,7 +117,9 @@ async def get_recent_transactions(limit: int = Query(50, ge=1, le=100)):
 
 
 @router.get("/by-merchant/{merchant}", response_model=List[TransactionResponse])
-async def get_transactions_by_merchant(merchant: str, limit: int = Query(100, ge=1, le=100)):
+async def get_transactions_by_merchant(
+    merchant: str, limit: int = Query(100, ge=1, le=100)
+):
     """Get transactions by merchant name."""
     with get_session().__enter__() as session:
         repo = TransactionRepository(session)
@@ -126,7 +128,9 @@ async def get_transactions_by_merchant(merchant: str, limit: int = Query(100, ge
 
 
 @router.get("/by-category/{category}", response_model=List[TransactionResponse])
-async def get_transactions_by_category(category: str, limit: int = Query(100, ge=1, le=100)):
+async def get_transactions_by_category(
+    category: str, limit: int = Query(100, ge=1, le=100)
+):
     """Get transactions by category."""
     with get_session().__enter__() as session:
         repo = TransactionRepository(session)
