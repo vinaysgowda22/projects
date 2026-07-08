@@ -21,8 +21,8 @@ class InsightsEngine:
             analytics_engine: AnalyticsEngine instance. If None, uses global instance.
         """
         config = get_config()
-        self.client = OpenAI(api_key=config.openai.api_key)
-        self.model = config.openai.model
+        self.client = OpenAI(api_key=config.ai.api_key)
+        self.model = config.ai.model
         self.analytics = analytics_engine or get_analytics_engine()
     
     def query_natural_language(self, question: str) -> dict:
