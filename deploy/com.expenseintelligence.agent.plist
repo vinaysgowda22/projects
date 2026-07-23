@@ -20,8 +20,8 @@
     <key>ProgramArguments</key>
     <array>
       <string>/bin/bash</string>
-      <!-- Replace with the absolute path to your clone. -->
-      <string>/Users/CHANGE_ME/projects/scripts/launch.sh</string>
+      <!-- Launch the repo-local startup script. -->
+      <string>/Users/vinay/Documents/projects/ExpenseIntelligence/scripts/launch.sh</string>
     </array>
 
     <!-- Run at login and keep it alive. -->
@@ -30,14 +30,14 @@
     <key>KeepAlive</key>
     <true/>
 
-    <!-- Replace with the absolute path to your clone. -->
+    <!-- Use the repo root as the working directory. -->
     <key>WorkingDirectory</key>
-    <string>/Users/CHANGE_ME/projects</string>
+    <string>/Users/vinay/Documents/projects/ExpenseIntelligence</string>
 
     <key>StandardOutPath</key>
-    <string>/Users/CHANGE_ME/projects/logs/agent.out.log</string>
+    <string>/Users/vinay/Documents/projects/ExpenseIntelligence/logs/agent.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/CHANGE_ME/projects/logs/agent.err.log</string>
+    <string>/Users/vinay/Documents/projects/ExpenseIntelligence/logs/agent.err.log</string>
 
     <key>ProcessType</key>
     <string>Background</string>

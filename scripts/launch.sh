@@ -40,9 +40,23 @@ trap cleanup EXIT INT TERM
 
 echo "Starting background agent (scheduler + FastAPI)..."
 python -m scripts.run_agent &
+AGENT_PID=$!
 
 echo "Starting Streamlit UI on port ${STREAMLIT_PORT}..."
-streamlit run dashboard/app.py --server.port "${STREAMLIT_PORT}" &
+export STREAMLIT_SERVER_HEADLESS=true
+export STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+streamlit run dashboard/app.py --server.port "${STREAMLIT_PORT}" --server.headless true --browser.gatherUsageStats false &
+STREAMLIT_PID=$!
 
 # Wait for either process to exit.
-wait -n
+while true; do
+  if ! kill -0 "${AGENT_PID}" 2>/dev/null; then
+    wait "${AGENT_PID}" || true
+    break
+  fi
+  if ! kill -0 "${STREAMLIT_PID}" 2>/dev/null; then
+    wait "${STREAMLIT_PID}" || true
+    break
+  fi
+  sleep 1
+ done
